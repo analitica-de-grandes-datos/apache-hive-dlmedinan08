@@ -13,5 +13,21 @@ Escriba el resultado a la carpeta `output` de directorio de trabajo.
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+DROP TABLE IF EXISTS small_numbers;
 
+CREATE TABLE small_numbers (letter        STRING,
+                          dates         DATE,
+                          number        INT)
+
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
+LOAD DATA LOCAL INPATH "data.tsv" OVERWRITE INTO TABLE small_numbers;
+
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+
+SELECT DISTINCT number
+FROM small_numbers
+ORDER BY number
+LIMIT 5;
 
