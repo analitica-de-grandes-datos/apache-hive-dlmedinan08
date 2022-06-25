@@ -46,3 +46,17 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+
+SELECT createdtable.c1, createdtable.letter, createdtable.number
+FROM 
+    tbl0
+JOIN (SELECT c1, letter, number
+    FROM 
+        tbl1
+    LATERAL VIEW
+        EXPLODE(c4) tbl1 AS letter, number) createdtable
+ON 
+    tbl0.c1 = createdtable.c1
+WHERE tbl0.c2 = letter
